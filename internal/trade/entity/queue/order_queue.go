@@ -22,35 +22,6 @@ type QueueItem interface {
 	GetAmount() decimal.Decimal //订单金额，在市价订单的时候生效，限价单不需要这个字段
 }
 
-type PriorityQueue []QueueItem
-
-func (pq PriorityQueue) Len() int { return len(pq) }
-
-func (pq PriorityQueue) Less(i, j int) bool {
-	return pq[i].Less(pq[j])
-}
-
-func (pq PriorityQueue) Swap(i, j int) {
-	pq[i], pq[j] = pq[j], pq[i]
-	pq[i].SetIndex(i)
-	pq[j].SetIndex(j)
-}
-
-func (pq *PriorityQueue) Pop() interface{} {
-	old := *pq
-	n := len(old)
-	item := old[n-1]
-	item.SetIndex(-1)
-	*pq = old[0 : n-1]
-	return item
-}
-
-func (pq *PriorityQueue) Push(x interface{}) {
-	n := len(*pq)
-	x.(QueueItem).SetIndex(n)
-	*pq = append(*pq, x.(QueueItem))
-}
-
 func CreateQueue() *OrderQueue {
 	pq := make(PriorityQueue, 0)
 	heap.Init(&pq)
