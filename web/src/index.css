@@ -1,0 +1,126 @@
+.orderbook {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: rgb(255, 255, 255);
+    font-family: atlas, sans-serif;
+    line-height: 1.15;
+    text-size-adjust: 100%;
+    background: rgb(7, 15, 21);
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 46px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0px 28px;
+    border-bottom: 1px solid rgb(38, 45, 52);
+    background: rgb(18, 29, 39);
+    overflow: hidden;
+}
+
+.orderBookContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.labelContainer {
+    display: flex;
+    flex-direction: row;
+    height: 31px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgb(38, 45, 52);
+    background: rgb(7, 15, 21);
+    overflow: hidden;
+}
+
+.leftLabelCol {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 3px;
+
+    font-weight: normal;
+    line-height: 1.5;
+    font-size: 11px;
+    text-align: left;
+    color: rgb(138, 147, 159);
+}
+
+.centerLabelCol {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 3px;
+
+    font-weight: normal;
+    line-height: 1.5;
+    font-size: 11px;
+    text-align: left;
+    color: rgb(138, 147, 159);
+}
+
+.rightLabelCol {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 16px;
+
+    font-weight: normal;
+    line-height: 1.5;
+    font-size: 11px;
+    text-align: left;
+    color: rgb(138, 147, 159);
+}
+
+.tableContainer {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.entriesContainer {
+    border-bottom: 1px solid rgb(38, 45, 52);
+    max-height: 373px;
+    overflow: hidden;
+}
+
+.entryContainer {
+    display: flex;
+    flex-direction: row;
+    height: 31px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    background: rgb(7, 15, 21);
+}
+
+.entryText {
+    color: white;
+    font-weight: bold;
+}
+
+.entrySellText {
+    color: rgba(255, 0, 0, 0.8);
+    font-weight: bold;
+}
+
+.entryBuyText {
+    color: rgba(0, 255, 0, 0.8);
+    font-weight: bold;
+}
+
+.entryContainer:hover {
+    background-color: rgb(255, 255, 255, 0.1);
+}
