@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"go_trade_engine_demo/internal/trade/entity/queue"
 	"go_trade_engine_demo/internal/trade/entity/trade"
@@ -35,8 +36,10 @@ func main() {
 	tradeSvc := service.NewTradeService(tradeRepo, askRepo, bidRepo)
 
 	gin.SetMode(gin.DebugMode)
-	r := gin.New()
+	r := gin.Default()
 	r.Use(initWss)
+	r.Use(cors.Default())
+
 	httpHandler.NewHandler(&httpHandler.Config{
 		Router:   r,
 		TradeSvc: tradeSvc,
