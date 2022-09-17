@@ -45,14 +45,14 @@ func quickSort(nums []string, asc_desc string) []string {
 	return append(append(right, mid...), left...)
 }
 
-func SortMap2Slice(m map[string]string, ask_bid constants.OrderSide) [][2]string {
+func SortMap2Slice(m map[string]string, askBid constants.OrderSide) [][2]string {
 	var res [][2]string
 	var keys []string
 	for k, _ := range m {
 		keys = append(keys, k)
 	}
 
-	if ask_bid == constants.OrderSideSell {
+	if askBid == constants.OrderSideSell {
 		keys = quickSort(keys, "asc")
 	} else {
 		keys = quickSort(keys, "desc")
