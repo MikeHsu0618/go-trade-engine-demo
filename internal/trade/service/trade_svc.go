@@ -142,6 +142,7 @@ func (s *tradeService) DeleteOrder(c *gin.Context) {
 func (s *tradeService) GetTradeLog(c *gin.Context) {
 	pair := s.tradeRepo.GetPair()
 	httputil.NewSuccess(c, gin.H{
-		"trade_log": pair.RecentTrade,
+		"trade_log":    pair.RecentTrade,
+		"latest_price": pair.LatestPrice,
 	})
 }
