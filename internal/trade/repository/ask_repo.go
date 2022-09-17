@@ -9,6 +9,7 @@ import (
 type AskRepository interface {
 	CreateAskItem(pt constants.PriceType, uniqId string, price, quantity, amount decimal.Decimal, createTime int64) *order.AskItem
 	CreateAskLimitItem(uniq string, price, quantity decimal.Decimal, createTime int64) *order.AskItem
+	CreateAskMarketQtyItem(uniq string, quantity decimal.Decimal, createTime int64) *order.AskItem
 	CreateAskMarketAmountItem(uniq string, amount, maxHoldQty decimal.Decimal, createTime int64) *order.AskItem
 }
 

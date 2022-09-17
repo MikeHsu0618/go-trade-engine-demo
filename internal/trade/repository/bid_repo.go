@@ -8,6 +8,7 @@ import (
 
 type BidRepository interface {
 	CreateBidItem(pt constants.PriceType, uniqId string, price, quantity, amount decimal.Decimal, createTime int64) *order.BidItem
+	CreateBidLimitItem(uniq string, price, quantity decimal.Decimal, createTime int64) *order.BidItem
 	CreateBidMarketQtyItem(uniq string, quantity, maxAmount decimal.Decimal, createTime int64) *order.BidItem
 	CreateBidMarketAmountItem(uniq string, amount decimal.Decimal, createTime int64) *order.BidItem
 }

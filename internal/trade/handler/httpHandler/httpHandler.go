@@ -24,11 +24,12 @@ func NewHandler(c *Config) {
 	trade := v1Group.Group("trade")
 	{
 		trade.GET("/depth", h.tradeSvc.GetDepth)
-		trade.POST("/orders", h.tradeSvc.CreateOrder)
-		trade.DELETE("/orders", h.tradeSvc.DeleteOrder)
 		trade.GET("/log", h.tradeSvc.GetTradeLog)
-		trade.GET("/test_rand", h.success)
+		trade.POST("/orders", h.tradeSvc.CreateOrder)
+		trade.POST("/randomOrders", h.tradeSvc.CreateRandomOrder)
+		trade.DELETE("/orders", h.tradeSvc.DeleteOrder)
 	}
+
 	// wss
 	c.Router.GET("/ws", wss.ServeWs)
 }

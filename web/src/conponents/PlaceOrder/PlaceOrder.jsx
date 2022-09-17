@@ -33,6 +33,30 @@ function PlaceOrder() {
         }
     }
 
+    const createRandomOrder = async (orderType) => {
+        try {
+            const res = await axios.post(
+                'http://localhost:8888/api/v1/trade/randomOrders',
+                {
+                    order_type: orderType,
+                },
+            )
+            toast.success(
+                `order_type: ${orderType} ask_len: ${res.data.data.ask_len} bid_len: ${res.data.data.bid_len}`,
+                {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+        } catch (e) {
+            toast.error(`error: ${e.response.data.message}`)
+        }
+    }
+
 
     return (
         <div>
@@ -83,9 +107,14 @@ function PlaceOrder() {
                     </div>
                 </div>
                 <div>
-                    <button type={null} className="btn btn-primary m-2" onClick={()=> placeOrder('bid')}>買入</button>
-                    <button type={null} className="btn btn-danger m-2" onClick={()=> placeOrder('ask')}>賣出</button>
+                    <button className="btn btn-primary m-2" onClick={()=> placeOrder('bid')}>買入</button>
+                    <button className="btn btn-danger m-2" onClick={()=> placeOrder('ask')}>賣出</button>
+                    <button className="btn btn-primary m-2" onClick={()=> createRandomOrder('bid')}>隨機買入 10 筆</button>
+                    <button className="btn btn-danger m-2" onClick={()=> createRandomOrder('ask')}>隨機賣出 10 筆</button>
                 </div>
+            <div>
+
+            </div>
         </div>
     )
 }

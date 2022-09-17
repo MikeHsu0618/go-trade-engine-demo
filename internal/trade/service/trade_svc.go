@@ -20,6 +20,7 @@ type TradeService interface {
 	GetTradeLog(c *gin.Context)
 	CreateOrder(c *gin.Context)
 	DeleteOrder(c *gin.Context)
+	CreateRandomOrder(c *gin.Context)
 }
 
 type tradeService struct {
@@ -120,7 +121,6 @@ func (s *tradeService) CreateOrder(c *gin.Context) {
 }
 
 func (s *tradeService) DeleteOrder(c *gin.Context) {
-
 	var param order.DeleteOrderRequest
 	err := c.ShouldBindJSON(&param)
 	if err != nil {
@@ -144,5 +144,41 @@ func (s *tradeService) GetTradeLog(c *gin.Context) {
 	httputil.NewSuccess(c, gin.H{
 		"trade_log":    pair.RecentTrade,
 		"latest_price": pair.LatestPrice,
+	})
+}
+
+func (s *tradeService) CreateRandomOrder(c *gin.Context) {
+	type params struct {
+		OrderType string `json:"order_type"`
+	}
+	var input params
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		httputil.NewError(c, 429, fmt.Sprintf("Validation Error: %v", err))
+		return
+	}
+	op := strings.ToLower(input.OrderType)
+	if op != "ask" {
+		op = "bid"
+	}
+	pair := s.tradeRepo.GetPair()
+	func() {
+		cnt := 10
+		for i := 0; i < cnt; i++ {
+			orderId := uuid.NewString()
+			if op == "ask" {
+				orderId = fmt.Sprintf("a-%s", orderId)
+				item := s.askRepo.CreateAskLimitItem(orderId, util.RandDecimal(20, 50), util.RandDecimal(20, 100), time.Now().UnixNano())
+				pair.NewOrderChan <- item
+			} else {
+				orderId = fmt.Sprintf("b-%s", orderId)
+				item := s.bidRepo.CreateBidLimitItem(orderId, util.RandDecimal(1, 20), util.RandDecimal(20, 100), time.Now().UnixNano())
+				pair.NewOrderChan <- item
+			}
+		}
+	}()
+	httputil.NewSuccess(c, gin.H{
+		"ask_len": pair.AskLen(),
+		"bid_len": pair.BidLen(),
 	})
 }
