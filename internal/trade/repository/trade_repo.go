@@ -59,7 +59,7 @@ func (r *tradeRepository) GetBidDepth(size int) [][2]string {
 func (r *tradeRepository) matching() {
 	for {
 		select {
-		case newOrder := <-r.pair.ChNewOrder:
+		case newOrder := <-r.pair.NewOrderChan:
 			go r.handlerNewOrder(newOrder)
 		default:
 			r.handlerLimitOrder()
@@ -209,7 +209,7 @@ func (r *tradeRepository) doMarketBuy(item queue.QueueItem) {
 
 		if !ok {
 			//市价单不管是否完全成交，都触发一次撤单操作
-			r.pair.ChCancelResult <- item.GetUniqueId()
+			r.pair.CancelResultChan <- item.GetUniqueId()
 			break
 		}
 
@@ -282,7 +282,7 @@ func (r *tradeRepository) doMarketSell(item queue.QueueItem) {
 		}()
 
 		if !ok {
-			r.pair.ChCancelResult <- item.GetUniqueId()
+			r.pair.CancelResultChan <- item.GetUniqueId()
 			break
 		}
 
@@ -305,7 +305,7 @@ func (r *tradeRepository) sendTradeResultNotify(ask, bid queue.QueueItem, price,
 		r.logger.Info(fmt.Sprintf("%s tradelog: %+v", r.pair.Symbol, tradelog))
 	}
 
-	r.pair.ChTradeResult <- tradelog
+	r.pair.TradeResultChan <- tradelog
 }
 
 func (r *tradeRepository) depthTicker(que *queue.OrderQueue) {
@@ -371,10 +371,8 @@ func (r *tradeRepository) SendMessage(tag string, data interface{}) {
 func (r *tradeRepository) watchTradeLog() {
 	for {
 		select {
-		case log, ok := <-r.pair.ChTradeResult:
+		case log, ok := <-r.pair.TradeResultChan:
 			if ok {
-				//
-
 				relog := gin.H{
 					"trade_price":    r.pair.Price2String(log.TradePrice),
 					"trade_amount":   r.pair.Price2String(log.TradeAmount),
@@ -385,11 +383,10 @@ func (r *tradeRepository) watchTradeLog() {
 				}
 				r.SendMessage("trade", relog)
 
-				// TODO
-				//if len(recentTrade) >= 10 {
-				//	recentTrade = recentTrade[1:]
-				//}
-				//recentTrade = append(recentTrade, relog)
+				if len(r.pair.RecentTrade) >= 10 {
+					r.pair.RecentTrade = r.pair.RecentTrade[1:]
+				}
+				r.pair.RecentTrade = append(r.pair.RecentTrade, relog)
 
 				//latest price
 				r.SendMessage("latest_price", gin.H{
@@ -397,7 +394,7 @@ func (r *tradeRepository) watchTradeLog() {
 				})
 
 			}
-		case cancelOrderId := <-r.pair.ChCancelResult:
+		case cancelOrderId := <-r.pair.CancelResultChan:
 			r.SendMessage("cancel_order", gin.H{
 				"OrderId": cancelOrderId,
 			})
@@ -416,5 +413,5 @@ func (r *tradeRepository) DeleteOrder(side constants.OrderSide, uniq string) {
 		r.pair.BidQueue.Remove(uniq)
 	}
 	//删除成功后需要发送通知
-	r.pair.ChCancelResult <- uniq
+	r.pair.CancelResultChan <- uniq
 }

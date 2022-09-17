@@ -22,14 +22,15 @@ func main() {
 	askRepo := repository.NewAskRepository()
 	bidRepo := repository.NewBidRepository()
 	tradeRepo := repository.NewTradeRepository(&trade.Pair{
-		Symbol:         "TSM",
-		ChTradeResult:  make(chan trade.Result, 10),
-		ChNewOrder:     make(chan queue.QueueItem),
-		ChCancelResult: make(chan string, 10),
-		PriceDigit:     2,
-		QuantityDigit:  4,
-		AskQueue:       queue.CreateQueue(),
-		BidQueue:       queue.CreateQueue(),
+		Symbol:           "TSM",
+		TradeResultChan:  make(chan trade.Result, 10),
+		NewOrderChan:     make(chan queue.QueueItem),
+		CancelResultChan: make(chan string, 10),
+		RecentTrade:      make([]interface{}, 0),
+		PriceDigit:       2,
+		QuantityDigit:    4,
+		AskQueue:         queue.CreateQueue(),
+		BidQueue:         queue.CreateQueue(),
 	}, wssHub, logger)
 	tradeSvc := service.NewTradeService(tradeRepo, askRepo, bidRepo)
 

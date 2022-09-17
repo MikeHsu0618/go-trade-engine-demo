@@ -17,6 +17,7 @@ import (
 
 type TradeService interface {
 	GetDepth(c *gin.Context)
+	GetTradeLog(c *gin.Context)
 	CreateOrder(c *gin.Context)
 	DeleteOrder(c *gin.Context)
 }
@@ -103,12 +104,12 @@ func (s *tradeService) CreateOrder(c *gin.Context) {
 	if strings.ToLower(param.OrderType) == "ask" {
 		param.OrderId = fmt.Sprintf("a-%s", orderId)
 		item := s.askRepo.CreateAskItem(pt, param.OrderId, util.String2decimal(param.Price), util.String2decimal(param.Quantity), util.String2decimal(param.Amount), time.Now().UnixNano())
-		tradePair.ChNewOrder <- item
+		tradePair.NewOrderChan <- item
 
 	} else {
 		param.OrderId = fmt.Sprintf("b-%s", orderId)
 		item := s.bidRepo.CreateBidItem(pt, param.OrderId, util.String2decimal(param.Price), util.String2decimal(param.Quantity), util.String2decimal(param.Amount), time.Now().UnixNano())
-		tradePair.ChNewOrder <- item
+		tradePair.NewOrderChan <- item
 	}
 
 	go s.tradeRepo.SendMessage("new_order", param)
@@ -136,4 +137,11 @@ func (s *tradeService) DeleteOrder(c *gin.Context) {
 	go s.tradeRepo.SendMessage("cancel_order", param)
 
 	httputil.NewSuccess(c, "success")
+}
+
+func (s *tradeService) GetTradeLog(c *gin.Context) {
+	pair := s.tradeRepo.GetPair()
+	httputil.NewSuccess(c, gin.H{
+		"trade_log": pair.RecentTrade,
+	})
 }

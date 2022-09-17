@@ -18,10 +18,11 @@ type Result struct {
 }
 
 type Pair struct {
-	Symbol         string
-	ChTradeResult  chan Result
-	ChNewOrder     chan queue.QueueItem
-	ChCancelResult chan string
+	Symbol           string
+	TradeResultChan  chan Result
+	NewOrderChan     chan queue.QueueItem
+	CancelResultChan chan string
+	RecentTrade      []interface{}
 
 	PriceDigit    int
 	QuantityDigit int

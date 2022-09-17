@@ -26,7 +26,7 @@ func NewHandler(c *Config) {
 		trade.GET("/depth", h.tradeSvc.GetDepth)
 		trade.POST("/orders", h.tradeSvc.CreateOrder)
 		trade.DELETE("/orders", h.tradeSvc.DeleteOrder)
-		trade.GET("/trade_log", h.success)
+		trade.GET("/log", h.tradeSvc.GetTradeLog)
 		trade.GET("/test_rand", h.success)
 	}
 	// wss
