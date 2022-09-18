@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,7 +9,7 @@ function PlaceOrder() {
     const placeOrder = async (orderType) => {
         try {
             const res = await axios.post(
-                'http://localhost:8888/api/v1/trade/orders',
+                'http://localhost:8080/api/v1/trade/orders',
                 {
                     order_type: orderType,
                     price_type : priceType,
@@ -36,7 +36,7 @@ function PlaceOrder() {
     const createRandomOrder = async (orderType) => {
         try {
             const res = await axios.post(
-                'http://localhost:8888/api/v1/trade/randomOrders',
+                'http://localhost:8080/api/v1/trade/randomOrders',
                 {
                     order_type: orderType,
                 },
@@ -57,6 +57,10 @@ function PlaceOrder() {
         }
     }
 
+    useEffect(() => {
+        if (priceType !== 'market') return
+
+    }, [priceType])
 
     return (
         <div>
@@ -89,6 +93,8 @@ function PlaceOrder() {
                     <label htmlFor="input3" className="col-sm-2 col-form-label">價格</label>
                     <div className="col-sm-10">
                         <input
+                            disabled={priceType === 'market'}
+                            value={priceType === 'market' ? '按市價' : price}
                             onChange={(e)=> setPrice(e.target.value)}
                             type="text"
                             className="form-control"

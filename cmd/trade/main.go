@@ -4,16 +4,16 @@ import (
 	"flag"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"go_trade_engine_demo/internal/trade/entity/queue"
 	"go_trade_engine_demo/internal/trade/entity/trade"
 	"go_trade_engine_demo/internal/trade/handler/httpHandler"
 	"go_trade_engine_demo/internal/trade/pkg/log"
+	"go_trade_engine_demo/internal/trade/pkg/queue"
 	"go_trade_engine_demo/internal/trade/pkg/wss"
 	"go_trade_engine_demo/internal/trade/repository"
 	"go_trade_engine_demo/internal/trade/service"
 )
 
-var port = flag.String("port", ":8888", "port")
+var port = flag.String("port", ":8080", "port")
 var wssHub = wss.NewHub()
 
 func main() {
