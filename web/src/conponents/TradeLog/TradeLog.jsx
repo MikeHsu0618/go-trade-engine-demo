@@ -7,10 +7,14 @@ function formatTime(t) {
     let minutes = d.getMinutes();
     let month = d.getMonth() + 1;
     let date = d.getDate() + 1;
+    let second = d.getSeconds();
+    let hour = d.getHours();
     if (minutes < 10) minutes = `0${minutes}`
     if (month < 10) month = `0${month}`
     if (date < 10) date = `0${date}`
-    return d.getFullYear() + '-' + month + '-' + date + ' ' + d.getHours() + ':' + minutes + ':' + d.getSeconds();
+    if (second < 10) second = `0${second}`
+    if (hour < 10) hour = `0${hour}`
+    return d.getFullYear() + '-' + month + '-' + date + ' ' + hour + ':' + minutes + ':' + second;
 }
 
 function TradeLog(props) {
@@ -37,7 +41,7 @@ function TradeLog(props) {
 
     const fetch = async () => {
         try {
-        const res = await axios.get('http://localhost:8888/api/v1/trade/log')
+        const res = await axios.get('http://localhost:8080/api/v1/trade/log')
             setTradeLog(() => {
                 let tradeLog = res.data.data.trade_log.length >= 10 ? res.data.data.trade_log.slice(0,10) : res.data.data.trade_log
                 return tradeLog.sort((a, b) => {
