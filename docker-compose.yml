@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  trade:
+    container_name: "trade"
+    build:
+      context: .
+      dockerfile: ./build/trade/dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    tty: true
+    privileged: true
+
+  web:
+    container_name: "web"
+    build:
+      context: .
+      dockerfile: ./build/web/dockerfile
+    ports:
+      - "80:80"
