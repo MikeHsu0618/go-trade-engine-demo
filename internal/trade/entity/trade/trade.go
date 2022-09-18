@@ -2,7 +2,7 @@ package trade
 
 import (
 	"github.com/shopspring/decimal"
-	"go_trade_engine_demo/internal/trade/entity/queue"
+	"go_trade_engine_demo/internal/trade/pkg/queue"
 	"go_trade_engine_demo/internal/trade/util"
 	"sync"
 )

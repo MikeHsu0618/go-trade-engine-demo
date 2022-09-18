@@ -2,7 +2,7 @@ package order
 
 import (
 	"go_trade_engine_demo/internal/trade/constants"
-	"go_trade_engine_demo/internal/trade/entity/queue"
+	"go_trade_engine_demo/internal/trade/pkg/queue"
 )
 
 type AskItem struct {
