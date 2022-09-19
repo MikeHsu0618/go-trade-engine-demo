@@ -9,12 +9,12 @@ type BidItem struct {
 	Order
 }
 
-func (a *BidItem) Less(other queue.QueueItem) bool {
+func (b *BidItem) Less(other queue.QueueItem) bool {
 	//价格优先，时间优先原则
 	//价格高的在最上面
-	return (a.Price.Cmp(other.(*BidItem).Price) == 1) || (a.Price.Cmp(other.(*BidItem).Price) == 0 && a.CreateTime < other.(*BidItem).CreateTime)
+	return (b.Price.Cmp(other.(*BidItem).Price) == 1) || (b.Price.Cmp(other.(*BidItem).Price) == 0 && b.CreateTime < other.(*BidItem).CreateTime)
 }
 
-func (a *BidItem) GetOrderSide() constants.OrderSide {
+func (b *BidItem) GetOrderSide() constants.OrderSide {
 	return constants.OrderSideBuy
 }
