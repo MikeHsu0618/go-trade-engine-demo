@@ -23,7 +23,7 @@ function useTrade() {
         tradeLog,
         setTradeLog,
         myTrade,
-        setMyTrade
+        setMyTrade,
     }
 }
 

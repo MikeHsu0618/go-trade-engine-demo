@@ -4,6 +4,7 @@ import "./index.css"
 import TradeLog from "./conponents/TradeLog/TradeLog.jsx";
 import PlaceOrder from "./conponents/PlaceOrder/PlaceOrder.jsx";
 import useTrade from "./hooks/useTrade.jsx";
+import PriceChart from "./PriceChart/PriceChart.jsx";
 function App() {
   const {
     askDepth,
@@ -16,7 +17,7 @@ function App() {
     setTradeLog,
     tradeLog,
     setMyTrade,
-      myTrade
+    myTrade,
   } = useTrade()
 
   const props = {
@@ -33,19 +34,19 @@ function App() {
     setMyTrade,
   }
 
-  return <div className="container text-center" style={{maxWidth: '1000px'}}>
+  return <div className="container text-center" style={{maxWidth: '1440px'}}>
     <div className="row align-items-start">
       <div className="col">
         <OrderBook {...props}/>
       </div>
       <div className=" col">
+        <PriceChart {...props}/>
         <PlaceOrder />
-        <TradeLog {...props} />
       </div>
-
+      <div className=" col">
+        <TradeLog {...props}/>
+      </div>
     </div>
-
-
     {/*<div className="row align-items-center">*/}
     {/*  <OrderHistory {...props} className="col-6"/>*/}
     {/*</div>*/}
