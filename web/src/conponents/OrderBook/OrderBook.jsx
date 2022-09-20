@@ -1,9 +1,12 @@
-import React, {useCallback, useEffect, useState} from "react";
-
+import React, {useCallback, useEffect, useRef, useState} from "react";
 // Suppose we are provided with the orderbook data like below...
 const CRYPTO = 'BTC';
 const FIAT = 'USD';
-
+const spreadColor = {
+    up: 'rgba(0, 255, 0, 0.8)',
+    down: 'rgba(255, 0, 0, 0.8)',
+    fair: 'rgb(138, 147, 159)'
+}
 
 function OrderBook(props) {
     const {
@@ -15,7 +18,7 @@ function OrderBook(props) {
         setLatestPrice,
         lastMessage,
     } = props
-
+    const [trend, setTrend] = useState(spreadColor['fair'])
     useEffect(() => {
         if (!lastMessage) return
         let data = lastMessage.data.split('\n')
@@ -40,14 +43,20 @@ function OrderBook(props) {
                     price: item[0]
                 })))
             }
+
+            // if (msg.tag === 'trade') setTrend(spreadColor['fair'])
+
             if (msg.tag === "latest_price") {
                 setLatestPrice(msg.data.latest_price)
+                if (msg.data.latest_price === latestPrice) setTrend(spreadColor['fair'])
+                if (msg.data.latest_price > latestPrice) setTrend(spreadColor['up'])
+                if (msg.data.latest_price < latestPrice) setTrend(spreadColor['down'])
             }
         })
     }, [lastMessage]);
 
   return (
-    <div className='orderbook' style={{width: "300px"}}>
+    <div className='orderbook' >
       <OrderBookHeader />
       <div className='orderBookContainer'>
         <OrderBookLabel fiat={FIAT} />
@@ -55,6 +64,7 @@ function OrderBook(props) {
           sellEntries={askDepth}
           buyEntries={bidDepth}
           latestPrice={latestPrice}
+          trend={trend}
           fiat={FIAT}
         />
       </div>
@@ -79,11 +89,11 @@ function OrderBookLabel() {
   );
 }
 
-function OrderBookTable({ sellEntries, buyEntries, latestPrice }) {
+function OrderBookTable({ sellEntries, buyEntries, latestPrice, trend }) {
     return (
     <div className='tableContainer'>
       <OrderBookTableEntries entries={sellEntries} side={'sell'} />
-      <OrderBookTableLabel spread={latestPrice} />
+      <OrderBookTableLabel spread={latestPrice} trend={trend}/>
       <OrderBookTableEntries entries={buyEntries} side={'buy'} />
     </div>
   );
@@ -122,14 +132,25 @@ function OrderBookTableEntry({ side, size, price, pos }) {
   );
 }
 
-function OrderBookTableLabel({ spread }) {
+function OrderBookTableLabel({ spread, trend }) {
   return (
     <div className='labelContainer'>
       <div className='leftLabelCol'>
         <span>{FIAT} Spread</span>
       </div>
       <div className='centerLabelCol'>
-        <span>{spread}</span>
+        <span style={{
+            fontSize: 20,
+            color: trend
+        }}><span style={{
+            marginRight: -3,
+        }}>{spread}</span>
+            {
+                trend === spreadColor['up'] ? <i className="bi bi-arrow-up"></i> :
+                    trend === spreadColor['down'] ? <i className="bi bi-arrow-down"></i> :
+                    ''
+            }
+        </span>
       </div>
     </div>
   );
