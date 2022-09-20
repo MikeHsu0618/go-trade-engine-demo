@@ -10,8 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import axios from "axios";
-import {toast} from "react-toastify";
+import useInterval from "../hooks/useInterval.jsx";
 
 ChartJS.register(
     CategoryScale,
@@ -41,10 +40,7 @@ function getLastItems(arr, amount) {
     return arr
 }
 
-
-
 function PriceChart(props) {
-    const timer = useRef(null);
     const [data, setData] = useState([])
     const [label,setLabel] = useState([])
     const {latestPrice} = props
@@ -75,21 +71,12 @@ function PriceChart(props) {
         ]
     };
 
-     const pushChartData = async () => {
-         try {
-             const res = await axios.get('http://localhost:8080/api/v1/trade/log')
-             setData((prev)=> getLastItems([...prev, res.data.data.latest_price], 10))
-             setLabel((prev) => getLastItems([...prev, getTime()], 10))
-         } catch (e) {
-             toast.error(e.response.data.message)
-         }
+     const pushChartData = () => {
+         setData((prev)=> getLastItems([...prev, latestPrice], 10))
+         setLabel((prev) => getLastItems([...prev, getTime()], 10))
     }
 
-    useEffect(() => {
-        timer.current = setInterval(pushChartData, 2000)
-        return () => clearInterval(timer.current);
-    }, [])
-
+    useInterval(() => pushChartData(), 5000)
     return (
         <div><Line data={chartData} /></div>
 );

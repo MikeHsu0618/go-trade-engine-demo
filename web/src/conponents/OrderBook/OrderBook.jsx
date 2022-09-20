@@ -141,7 +141,8 @@ function OrderBookTableLabel({ spread, trend }) {
       <div className='centerLabelCol'>
         <span style={{
             fontSize: 20,
-            color: trend
+            color: trend,
+            marginRight: 5
         }}><span style={{
             marginRight: -3,
         }}>{spread}</span>
