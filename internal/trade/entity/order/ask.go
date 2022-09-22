@@ -10,8 +10,8 @@ type AskItem struct {
 }
 
 func (a *AskItem) Less(other queue.QueueItem) bool {
-	//价格优先，时间优先原则
-	//价格低的在最上面
+	// 價格優先，時間優先原則
+	// 價格低的在最上面
 	return (a.Price.Cmp(other.(*AskItem).Price) == -1) || (a.Price.Cmp(other.(*AskItem).Price) == 0 && a.CreateTime < other.(*AskItem).CreateTime)
 }
 

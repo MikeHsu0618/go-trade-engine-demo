@@ -19,7 +19,7 @@ type QueueItem interface {
 	GetCreateTime() int64
 	GetOrderSide() constants.OrderSide
 	GetPriceType() constants.PriceType
-	GetAmount() decimal.Decimal //订单金额，在市价订单的时候生效，限价单不需要这个字段
+	GetAmount() decimal.Decimal // 訂單金額，在市價單下單才用的到，限價單不需要
 }
 
 func CreateQueue() *OrderQueue {

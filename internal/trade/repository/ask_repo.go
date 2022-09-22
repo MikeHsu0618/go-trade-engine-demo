@@ -40,7 +40,7 @@ func (a *askRepository) CreateAskMarketQtyItem(uniq string, quantity decimal.Dec
 	return a.CreateAskItem(constants.PriceTypeMarketQuantity, uniq, decimal.Zero, quantity, decimal.Zero, createTime)
 }
 
-//市价 按金额卖出订单时，需要用户持有交易物的数量，在撮合时候防止超卖
+// TODO 市價單：按金額賣出訂單時，需要用戶持有交易物的數量，防止撮合時超賣
 func (a *askRepository) CreateAskMarketAmountItem(uniq string, amount, maxHoldQty decimal.Decimal, createTime int64) *order.AskItem {
 	return a.CreateAskItem(constants.PriceTypeMarketAmount, uniq, decimal.Zero, maxHoldQty, amount, createTime)
 }

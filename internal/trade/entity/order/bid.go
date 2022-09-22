@@ -10,8 +10,8 @@ type BidItem struct {
 }
 
 func (b *BidItem) Less(other queue.QueueItem) bool {
-	//价格优先，时间优先原则
-	//价格高的在最上面
+	// 價格優先，時間優先原則
+	// 價格高的在最上面
 	return (b.Price.Cmp(other.(*BidItem).Price) == 1) || (b.Price.Cmp(other.(*BidItem).Price) == 0 && b.CreateTime < other.(*BidItem).CreateTime)
 }
 

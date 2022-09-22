@@ -40,7 +40,7 @@ func (b *bidRepository) CreateBidMarketQtyItem(uniq string, quantity, maxAmount 
 	return b.CreateBidItem(constants.PriceTypeMarketQuantity, uniq, decimal.Zero, quantity, maxAmount, createTime)
 }
 
-//市价 按金额卖出订单时，需要用户持有交易物的数量，在撮合时候防止超卖
+// TODO 市價單：按金額賣出訂單時，需要用戶持有交易物的數量，在撮合時防止超賣
 func (b *bidRepository) CreateBidMarketAmountItem(uniq string, amount decimal.Decimal, createTime int64) *order.BidItem {
 	return b.CreateBidItem(constants.PriceTypeMarketAmount, uniq, decimal.Zero, decimal.Zero, amount, createTime)
 }

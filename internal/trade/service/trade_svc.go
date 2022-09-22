@@ -82,7 +82,7 @@ func (s *tradeService) CreateOrder(c *gin.Context) {
 
 		} else if param.Quantity != "" {
 			pt = constants.PriceTypeMarketQuantity
-			//市价按数量买入资产时，需要用户账户所有可用资产数量，测试默认100块
+			// TODO 市價按數量買入資產時，需要用戶帳戶所有可用資產數量，默認 100
 			param.Amount = "100"
 			if quantity.Cmp(decimal.NewFromFloat(100000000)) > 0 || quantity.Cmp(decimal.Zero) <= 0 {
 				httputil.NewError(c, 429, "數量必須大於零，且不能超過 100000000")

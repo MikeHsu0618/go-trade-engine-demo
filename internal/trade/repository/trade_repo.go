@@ -78,7 +78,7 @@ func (r *tradeRepository) handlerNewOrder(newOrder queue.QueueItem) {
 			r.pair.BidQueue.Push(newOrder)
 		}
 	} else {
-		//市价单处理
+		// 市價單處理
 		if newOrder.GetOrderSide() == constants.OrderSideSell {
 			r.doMarketSell(newOrder)
 		} else {
@@ -153,12 +153,13 @@ func (r *tradeRepository) doMarketBuy(item queue.QueueItem) {
 
 			ask := r.pair.AskQueue.Top()
 			if item.GetPriceType() == constants.PriceTypeMarketQuantity {
-				//根据用户资产计算出当前价格能买的最大数量
-				maxTradeQty := item.GetAmount().Div(ask.GetPrice())
-				maxTradeQty = decimal.Min(maxTradeQty, item.GetQuantity())
+				// TODO 根據用戶資產計算出當前價格能買的最大數量
+				// maxTradeQty := item.GetAmount().Div(ask.GetPrice())        // 當前資產可買進的最大數目
+				// maxTradeQty = decimal.Min(maxTradeQty, item.GetQuantity()) // 比較是否超過下單數目
+				maxTradeQty := item.GetQuantity()
 				curTradeQty := decimal.Zero
 
-				//市价按买入数量
+				// 市價按買入數量
 				if maxTradeQty.Cmp(decimal.New(1, int32(-r.pair.QuantityDigit))) < 0 {
 					return false
 				}
@@ -176,9 +177,9 @@ func (r *tradeRepository) doMarketBuy(item queue.QueueItem) {
 				item.SetAmount(item.GetAmount().Sub(curTradeQty.Mul(ask.GetPrice())))
 				return true
 			} else if item.GetPriceType() == constants.PriceTypeMarketAmount {
-				//市价-按成交金额
-				//成交金额不包含手续费，手续费应该由上层系统计算提前预留
-				//撮合会针对这个金额最大限度的买入
+				//  TODO 市價-按成交金額
+				// 成交金額不包含手續費，手續費應該由上層系統計算提前預留
+				// 撮合會針對輸入金額最大限度買入
 				if ask.GetPrice().Cmp(decimal.Zero) <= 0 {
 					return false
 				}
@@ -198,7 +199,7 @@ func (r *tradeRepository) doMarketBuy(item queue.QueueItem) {
 				}
 
 				r.sendTradeResultNotify(ask, item, ask.GetPrice(), curTradeQty)
-				//部分成交了，需要更新这个单的剩余可成交金额，用于下一轮重新计算最大成交量
+				// 部分成交了，需要更新此單剩餘可成交金額，用於下一輪重新计算最大成交量
 				item.SetAmount(item.GetAmount().Sub(curTradeQty.Mul(ask.GetPrice())))
 				item.SetQuantity(item.GetQuantity().Add(curTradeQty))
 				return true
@@ -208,7 +209,7 @@ func (r *tradeRepository) doMarketBuy(item queue.QueueItem) {
 		}()
 
 		if !ok {
-			//市价单不管是否完全成交，都触发一次撤单操作
+			// 市價單不管是否完全成交，都觸發一次撤單操作
 			r.pair.CancelResultChan <- item.GetUniqueId()
 			break
 		}
@@ -228,7 +229,7 @@ func (r *tradeRepository) doMarketSell(item queue.QueueItem) {
 			if item.GetPriceType() == constants.PriceTypeMarketQuantity {
 
 				curTradeQuantity := decimal.Zero
-				//市价按买入数量
+				// 市價按買入數量
 				if item.GetQuantity().Equal(decimal.Zero) {
 					return false
 				}
@@ -246,14 +247,14 @@ func (r *tradeRepository) doMarketSell(item queue.QueueItem) {
 
 				return true
 			} else if item.GetPriceType() == constants.PriceTypeMarketAmount {
-				//市价-按成交金额成交
+				// 市價-按成交金額成交
 				if bid.GetPrice().Cmp(decimal.Zero) <= 0 {
 					return false
 				}
 
 				maxTradeQty := item.GetAmount().Div(bid.GetPrice()).Truncate(int32(r.pair.QuantityDigit))
 
-				//还需要用户是否持有这么多资产来卖出的条件限制
+				// TODO 還需要用戶是否持有那麼多資產來賣出的條件限制
 				maxTradeQty = decimal.Min(maxTradeQty, item.GetQuantity())
 
 				curTradeQty := decimal.Zero
@@ -272,7 +273,7 @@ func (r *tradeRepository) doMarketSell(item queue.QueueItem) {
 				r.sendTradeResultNotify(item, bid, bid.GetPrice(), curTradeQty)
 				item.SetAmount(item.GetAmount().Sub(curTradeQty.Mul(bid.GetPrice())))
 
-				//市价 按成交额卖出时，需要用户持有的资产数量来进行限制
+				// 市價單按成交額賣出時，需要用户持有的資產数量来進行限制
 				item.SetQuantity(item.GetQuantity().Sub(curTradeQty))
 
 				return true
@@ -338,7 +339,7 @@ func (r *tradeRepository) depthTicker(que *queue.OrderQueue) {
 					}
 				}
 
-				//按价格排序map
+				// 按價格排序的 MAP
 				que.Depth = util.SortMap2Slice(depthMap, que.Top().GetOrderSide())
 			}
 		}()
@@ -388,7 +389,7 @@ func (r *tradeRepository) watchTradeLog() {
 				}
 				r.pair.RecentTrade = append(r.pair.RecentTrade, relog)
 
-				//latest price
+				// latest price
 				r.SendMessage("latest_price", gin.H{
 					"latest_price": r.pair.Price2String(log.TradePrice),
 				})
@@ -406,12 +407,12 @@ func (r *tradeRepository) watchTradeLog() {
 }
 
 func (r *tradeRepository) DeleteOrder(side constants.OrderSide, uniq string) {
-	//todo 最好根据订单编号知道是买单还是卖单，方便直接查找到相应的队列，从中删除
+	// TODO 最好根據訂單編號知道是買單還是賣單，方便直接查找相應的對列並從中刪除
 	if side == constants.OrderSideSell {
 		r.pair.AskQueue.Remove(uniq)
 	} else {
 		r.pair.BidQueue.Remove(uniq)
 	}
-	//删除成功后需要发送通知
+	// 删除成功后需要發送通知
 	r.pair.CancelResultChan <- uniq
 }
