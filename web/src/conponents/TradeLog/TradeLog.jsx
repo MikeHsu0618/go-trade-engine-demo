@@ -41,7 +41,7 @@ function TradeLog(props) {
 
     const fetch = async () => {
         try {
-        const res = await axios.get('http://localhost:8080/api/v1/trade/log')
+        const res = await axios.get('http://0.0.0.0:8080/api/v1/trade/log')
             setTradeLog(() => {
                 let tradeLog = res.data.data.trade_log.length >= 10 ? res.data.data.trade_log.slice(0,10) : res.data.data.trade_log
                 return tradeLog.sort((a, b) => {

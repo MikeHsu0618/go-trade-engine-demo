@@ -14,7 +14,7 @@ function PlaceOrder() {
     const placeOrder = async (orderType) => {
         try {
             const res = await axios.post(
-                'http://localhost:8080/api/v1/trade/orders',
+                'http://0.0.0.0:8080/api/v1/trade/orders',
                 {
                     order_type: orderType,
                     price_type : priceType,
@@ -41,7 +41,7 @@ function PlaceOrder() {
     const createRandomOrder = async (orderType) => {
         try {
             const res = await axios.post(
-                'http://localhost:8080/api/v1/trade/randomOrders',
+                'http://0.0.0.0:8080/api/v1/trade/randomOrders',
                 {
                     order_type: orderType,
                 },
