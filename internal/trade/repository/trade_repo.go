@@ -229,7 +229,8 @@ func (r *tradeRepository) doMarketSell(item queue.QueueItem) {
 			if item.GetPriceType() == constants.PriceTypeMarketQuantity {
 
 				curTradeQuantity := decimal.Zero
-				// 市價按買入數量
+				// 市價單按賣出數量
+				// TODO 按持有數量限制買入
 				if item.GetQuantity().Equal(decimal.Zero) {
 					return false
 				}
@@ -252,10 +253,11 @@ func (r *tradeRepository) doMarketSell(item queue.QueueItem) {
 					return false
 				}
 
-				maxTradeQty := item.GetAmount().Div(bid.GetPrice()).Truncate(int32(r.pair.QuantityDigit))
-
 				// TODO 還需要用戶是否持有那麼多資產來賣出的條件限制
-				maxTradeQty = decimal.Min(maxTradeQty, item.GetQuantity())
+				//maxTradeQty := item.GetAmount().Div(bid.GetPrice()).Truncate(int32(r.pair.QuantityDigit))
+				//maxTradeQty = decimal.Min(maxTradeQty, item.GetQuantity())
+
+				maxTradeQty := item.GetQuantity()
 
 				curTradeQty := decimal.Zero
 				if maxTradeQty.Cmp(decimal.New(1, int32(-r.pair.QuantityDigit))) < 0 {
