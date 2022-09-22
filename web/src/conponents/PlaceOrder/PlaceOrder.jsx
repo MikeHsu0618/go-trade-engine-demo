@@ -2,6 +2,11 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-tippy/dist/tippy.css'
+import {
+    Tooltip,
+} from 'react-tippy';
+
 function PlaceOrder() {
     const [priceType, setPriceType] = useState('')
     const [price, setPrice] = useState('')
@@ -92,14 +97,20 @@ function PlaceOrder() {
                 <div className="row mb-3">
                     <label htmlFor="input3" className="col-sm-2 col-form-label">價格</label>
                     <div className="col-sm-10">
-                        <input
-                            disabled={priceType === 'market'}
-                            value={priceType === 'market' ? '按市價' : price}
-                            onChange={(e)=> setPrice(e.target.value)}
-                            type="text"
-                            className="form-control"
-                            id="input3"
-                        />
+                        <Tooltip
+                            disabled={priceType !== 'market'}
+                            title="市價單下單功能暫不考慮用戶現有金額及數量"
+                            position="top"
+                        >
+                            <input
+                                disabled={priceType === 'market'}
+                                value={priceType === 'market' ? '按市價' : price}
+                                onChange={(e)=> setPrice(e.target.value)}
+                                type="text"
+                                className="form-control"
+                                id="input3"
+                            />
+                        </Tooltip>
                     </div>
                 </div>
                 <div className="row mb-3">
