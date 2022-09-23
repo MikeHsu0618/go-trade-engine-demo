@@ -22,7 +22,8 @@ Demo : [http://ec2-13-231-126-71.ap-northeast-1.compute.amazonaws.com/](http://e
 
 ### 專案講解
 
- 此專案為以 `Golang` 作為後端以及 `React` 做為前端實現單體式交易撮合系統，以 `Clean Architecture` 為核心實踐 SOLID 原則，期望實現高內聚低耦合、可讀可擴充的程式品質。
+ 此專案為以 `Golang` 作為後端以及 `React` 做為前端實現單體式交易撮合系統，此專案目的為實現交易撮合功能所以買賣方進行委託時將不會考慮用戶持有資產、持有單位數量以及成交手續費...等外部邏輯。
+ 專案架構以 `Clean Architecture` 為核心實踐 SOLID 原則，期望實現高內聚低耦合、可讀可擴充的程式品質。
 
 ```yaml
 ├── build
