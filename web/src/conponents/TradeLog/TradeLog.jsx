@@ -6,7 +6,7 @@ function formatTime(t) {
     let d = new Date(t);
     let minutes = d.getMinutes();
     let month = d.getMonth() + 1;
-    let date = d.getDate() + 1;
+    let date = d.getDate();
     let second = d.getSeconds();
     let hour = d.getHours();
     if (minutes < 10) minutes = `0${minutes}`
