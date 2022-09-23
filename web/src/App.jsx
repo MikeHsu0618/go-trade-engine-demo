@@ -1,8 +1,8 @@
 import React from 'react'
-import OrderBook from './conponents/OrderBook/OrderBook.jsx'
+import OrderBook from './components/OrderBook/OrderBook.jsx'
 import "./index.css"
-import TradeLog from "./conponents/TradeLog/TradeLog.jsx";
-import PlaceOrder from "./conponents/PlaceOrder/PlaceOrder.jsx";
+import TradeLog from "./components/TradeLog/TradeLog.jsx";
+import PlaceOrder from "./components/PlaceOrder/PlaceOrder.jsx";
 import useTrade from "./hooks/useTrade.jsx";
 import PriceChart from "./PriceChart/PriceChart.jsx";
 function App() {
