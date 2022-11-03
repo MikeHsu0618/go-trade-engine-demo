@@ -18,8 +18,6 @@
 
 ![demo](./asset/demo.png)
 
-Demo : [http://ec2-13-231-126-71.ap-northeast-1.compute.amazonaws.com/](http://ec2-13-231-126-71.ap-northeast-1.compute.amazonaws.com/)
-
 ### 專案講解
 
  此專案為以 `Golang` 作為後端以及 `React` 做為前端實現單體式交易撮合系統，此專案目的為實現交易撮合功能所以買賣方進行委託時將不會考慮用戶持有資產、持有單位數量以及成交手續費...等外部邏輯。
